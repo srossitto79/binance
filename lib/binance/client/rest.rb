@@ -32,9 +32,9 @@ module Binance
       end
 
       def self.add_query_param(query, key, value)
-        query = query.dup.to_s
-        query << '&' unless query.empty?
-        query << "#{Faraday::Utils.escape key}=#{Faraday::Utils.escape value}"
+        q = query.to_s
+        q << '&' unless query.empty?
+        q << "#{Faraday::Utils.escape key}=#{Faraday::Utils.escape value}"
       end
 
       def camelize(str)
