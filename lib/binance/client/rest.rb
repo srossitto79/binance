@@ -33,7 +33,7 @@ module Binance
 
       def self.add_query_param(query, key, value)
         q = query.to_s
-        q << '&' unless query.empty?
+        q << '&' unless q.empty?
         q << "#{Faraday::Utils.escape key}=#{Faraday::Utils.escape value}"
       end
 
