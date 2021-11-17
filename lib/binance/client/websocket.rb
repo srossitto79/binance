@@ -7,6 +7,10 @@ module Binance
       # Public: String base url for WebSocket client to use
       BASE_URL = 'wss://stream.binance.com:9443'.freeze
 
+      def initialize
+        @clients = []
+      end
+
       # Public: Create a single WebSocket stream
       #
       # :stream - The Hash used to define the stream
@@ -167,6 +171,10 @@ module Binance
         create_stream "#{BASE_URL}/ws/#{listen_key}", methods: methods
       end
 
+      def ping!
+        @clients.each { |c| c.ping 'Ping' }
+      end
+
       private
 
       # Internal: Create a valid URL for a WebSocket to use
@@ -193,9 +201,10 @@ module Binance
       #   :error   - The Proc called when a stream receives an error (optional)
       #   :close   - The Proc called when a stream is closed (optional)
       def create_stream(url, methods:)
-        Faye::WebSocket::Client.new(url)
+        @clients << Faye::WebSocket::Client.new(url, nil)
                                .tap { |ws| attach_methods(ws, methods) }
       end
+
 
       # Internal: Iterate through methods passed and add them to the WebSocket
       #
